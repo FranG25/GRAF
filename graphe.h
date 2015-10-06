@@ -3,18 +3,16 @@
 
 #include "liste.h"
 
-
-
 typedef struct
 {
 	int size;
 	int oriente;
 	int pondere;
-	liste** voisins; //Tableau de tableau de liste.
+	liste** voisins;
 } TypGraphe;
 
 //Ajoute la transition (depart, etiquette, arrivee) dans l'automate A.
-void ajouteTransition(TypGraphe* A, int depart, int arrivee, char etiquette);
+void ajouteVoisin(TypGraphe* G, int sommet, int voisin, int poids);
 
 //Construit un automate exemple pour la déterminisation
 TypGraphe* construitAutomateExempleDeterminisation();

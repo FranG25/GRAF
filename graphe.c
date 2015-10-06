@@ -1,15 +1,16 @@
 #include "graphe.h"
 
-/*void ajouteTransition(TypGraphe* A, int depart, int arrivee, char etiquette)
+void ajouteVoisin(TypGraphe* G, int sommet, int voisin, int poids)
 {
-	ajouteListe(&A->voisins[depart][etiquette-'a'], arrivee);
-}*/
+	//ajouteListe(&A->voisins[depart][etiquette-'a'], arrivee);
+}
 
 TypGraphe* creerGraphe()
 {
 	TypGraphe* G = (TypGraphe*)malloc(sizeof(TypGraphe));
 	int i, j, size, oriente, pondere, voisins, cible, arete;
-
+	arete = 0;
+	
 	printf("Graphe orienté (1 -> oui - 0 -> non) : ");
 	scanf("%i", &oriente);
 	scanf("%*[^\n]s");
@@ -49,8 +50,8 @@ TypGraphe* creerGraphe()
 			{
 				printf("Poids de l'arête : ");
 				scanf("%i", &arete);
-				//ajouteVoisin
 			}
+			ajouteVoisin(G, i, cible, arete);
 		}
 	}
 	return G;
