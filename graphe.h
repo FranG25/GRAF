@@ -8,7 +8,7 @@ typedef struct
 	int size;
 	int oriente;
 	int pondere;
-	liste** voisins;
+	TypVoisins** voisins;
 } TypGraphe;
 
 //Ajoute la transition (depart, etiquette, arrivee) dans l'automate A.

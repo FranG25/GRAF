@@ -26,7 +26,7 @@ TypGraphe* creerGraphe()
 	G->size = size;
 	G->pondere = pondere;
 	G->oriente = oriente;
-	G->voisins = (liste**)malloc(G->size*sizeof(liste**));
+	G->voisins = (TypVoisins**)malloc(G->size*sizeof(TypVoisins**));
 
 	for(i=0;i<G->size;i++)
 	{

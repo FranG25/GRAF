@@ -1,13 +1,13 @@
 #include "liste.h"
 
-void ajouteListe(liste** l,int q)
+void ajouteListe(TypVoisins** l,int q)
 {
-	liste* ptl;
-	liste* tmp;
+	TypVoisins* ptl;
+	TypVoisins* tmp;
 	ptl=*l;
 	if(!ptl)
 	{
-		ptl=(liste*) malloc(sizeof(liste));
+		ptl=(TypVoisins*) malloc(sizeof(TypVoisins));
 		ptl->state=q;
 		ptl->suiv=NULL;
 		*l=ptl;
@@ -20,7 +20,7 @@ void ajouteListe(liste** l,int q)
 	if(q< ptl->state)
 	{
 		tmp=*l;
-		*l=(liste*) malloc(sizeof(liste));
+		*l=(TypVoisins*) malloc(sizeof(TypVoisins));
 		(*l)->state=q;
 		(*l)->suiv=tmp;
 		return;
@@ -31,7 +31,7 @@ void ajouteListe(liste** l,int q)
 	}
 	if(!ptl->suiv)
 	{
-		ptl->suiv=(liste*) malloc(sizeof(liste));
+		ptl->suiv=(TypVoisins*) malloc(sizeof(TypVoisins));
 		ptl=ptl->suiv;
 		ptl->state=q;
 		ptl->suiv=NULL;
@@ -43,7 +43,7 @@ void ajouteListe(liste** l,int q)
 	}
 	
 	tmp=ptl->suiv;
-	ptl->suiv=(liste*) malloc(sizeof(liste));
+	ptl->suiv=(TypVoisins*) malloc(sizeof(TypVoisins));
 	ptl=ptl->suiv;
 	ptl->state=q;
 	ptl->suiv=tmp;
@@ -51,7 +51,7 @@ void ajouteListe(liste** l,int q)
 
 
 
-void supprimeListe(liste** l, int arrivee)
+void supprimeListe(TypVoisins** l, int arrivee)
 {
 	
 	if(NULL == *l)
