@@ -1,12 +1,12 @@
 #include "graphe.h"
 
-TypGraphe* menu();
-TypGraphe* choixAutomate();
-void menu1(TypGraphe* A);
-void menu2(TypGraphe* A);
 
+int grapheExistant = 0;
 
-TypGraphe* menu()
+void menu1();
+void menu2(TypGraphe* G);
+
+void menu1()
 {
 	int choix;
 	TypGraphe* G;
@@ -22,6 +22,9 @@ TypGraphe* menu()
 		case 1:
 		{
 			G = creerGraphe();
+			afficheTransition(G);
+			grapheExistant = 1;
+			menu2(G);
 		}
 		break;
 		case 2:
@@ -37,10 +40,51 @@ TypGraphe* menu()
 		default:
 		{
 			printf("> Commande invalide\n");
-			menu();
+			menu1();
 		}
 	}
-	return G;
+}
+
+void menu2(TypGraphe* G)
+{	
+	int choix;
+	printf("1) Création d'un graphe\n");
+	printf("2) Lecture d'un graphe\n");
+	printf("3) Insertion d'un sommet\n");
+	printf("4) Insertion d'une arête\n");
+	printf("5) Suppression d'un sommet\n");
+	printf("6) Suppression d'une arête\n");
+	printf("7) Affichage\n");
+	printf("8) Sauvegarde\n");
+	printf("9) Quitter\n");
+	scanf("%d",&choix);
+	scanf("%*[^\n]s");
+	getchar();
+	switch(choix)
+	{
+		case 1:
+		{
+			grapheExistant = 1;
+		}
+		case 2:
+		{
+			grapheExistant = 1;
+			menu2(G);
+		}
+		case 7:
+		{
+			menu2(G);
+		}
+		case 9:
+		{
+			exit(-1);
+		}
+		default:
+		{
+			printf("> Commande invalide\n");
+			menu2(G);
+		}
+	}
 }
 
 /*void menu1(automate* A)
@@ -349,10 +393,7 @@ void menu(automate* A)
 
 int main()
 {
-	TypGraphe* A;
-	A = menu();
-	//menu(A);
-
+	menu1();
 }
 	
 		

@@ -2,7 +2,7 @@
 
 void ajouteVoisin(TypGraphe* G, int sommet, int voisin, int poids)
 {
-	//ajouteListe(&A->voisins[depart][etiquette-'a'], arrivee);
+	ajouteListe(&G->voisins[sommet], voisin, poids);
 }
 
 TypGraphe* creerGraphe()
@@ -56,7 +56,34 @@ TypGraphe* creerGraphe()
 	}
 	return G;
 				
-			
+void afficheTransition(TypGraphe* G)
+{
+	int i, j;
+	TypVoisins* tmp; 	
+
+	for(i=0;i<G->size;i++)
+	{
+		printf("Sommet %d : ", i+1);
+		tmp = G->voisins[i];
+
+			while(tmp != NULL)
+			{
+				printf(" %d ", tmp->voisin);
+				tmp = tmp->suiv;
+			}
+		printf("\n");
+	}
+}
+
+
+void afficheGraphe(TypGraphe* G)
+{
+	printf(">> Affichage du Graphe\n");
+	printf("Nombre de sommet : %d\n", G->size);
+	printf("---------------------\n");
+	afficheTransition(G);
+	return 1;
+}
 			
 		
 		
@@ -145,63 +172,7 @@ automate* construitAutomateExemple()
 }
 
 
-void afficheTransition(automate* A)
-{
 
-	int i, j;
-	liste* tmp; 
-
-	printf("\nLes transitions :\n");
-	
-	
-	for(i=0; i<A->size; i++)
-	{
-		printf("-------------------\n");
-		printf("Depuis l'état %d\n", i);
-
-		for(j=0; j<A->sizealpha; j++)
-		{
-			printf("avec la lettre %c:\n", 'a'+j);
-			
-			tmp = A->trans[i][j];
-
-			while(tmp != NULL)
-			{
-				printf(" %d ", tmp->state);
-				tmp = tmp->suiv;
-				
-			}
-		printf("\n");
-		}
-	}
-}
-
-
-void afficheAutomate(automate* A)
-{
-	int i;
-
-	printf("Les états initiaux :\n");
-	for(i=0; i<A->size; i++)
-	{
-		if(A->initial[i] == 1)
-		{
-			printf(" %d ", i);
-		}
-	}
-	printf("\n");
-
-	printf("Les états finaux :\n");
-	for(i=0; i<A->size; i++)
-	{
-		if(A->final[i] == 1)
-		{
-			printf(" %d ", i);
-		}
-	}
-
-	afficheTransition(A);
-}
 		
 int compteTransition(automate* A)
 {

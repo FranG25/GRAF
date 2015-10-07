@@ -4,7 +4,8 @@
 #include "memoire.h"
 
 typedef struct s_liste {
-	int state;
+	int voisin;
+	int poids;
 	struct s_liste* suiv;
 } TypVoisins;
 
@@ -12,6 +13,6 @@ typedef struct s_liste {
 void supprimeListe(TypVoisins** l, int v);
 
 //Ajoute une liste
-void ajouteListe(TypVoisins** l, int q);
+void ajouteListe(TypVoisins** l, int voisin, int poids);
 
 #endif

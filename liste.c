@@ -1,31 +1,34 @@
 #include "liste.h"
 
-void ajouteListe(TypVoisins** l,int q)
+void ajouteListe(TypVoisins** l,int voisin, int poids)
 {
 	TypVoisins* ptl;
 	TypVoisins* tmp;
 	ptl=*l;
 	if(!ptl)
 	{
-		ptl=(TypVoisins*) malloc(sizeof(TypVoisins));
-		ptl->state=q;
+		ptl=(TypVoisins*)malloc(sizeof(TypVoisins));
+		ptl->voisin=voisin;
+		ptl->poids=poids;
 		ptl->suiv=NULL;
 		*l=ptl;
 		return;
 	}
-	if(ptl->state == q)
+	if(ptl->voisin == voisin)
 	{
 		return;
 	}
-	if(q< ptl->state)
+	if(voisin< ptl->voisin)
 	{
 		tmp=*l;
 		*l=(TypVoisins*) malloc(sizeof(TypVoisins));
-		(*l)->state=q;
+		(*l)->voisin=voisin;
+		(*l)->poids=poids;
+		
 		(*l)->suiv=tmp;
 		return;
 	}
-	while(ptl->suiv && ptl->suiv->state <q)
+	while(ptl->suiv && ptl->suiv->voisin <voisin)
 	{
 		ptl=ptl->suiv;
 	}
@@ -33,11 +36,12 @@ void ajouteListe(TypVoisins** l,int q)
 	{
 		ptl->suiv=(TypVoisins*) malloc(sizeof(TypVoisins));
 		ptl=ptl->suiv;
-		ptl->state=q;
+		ptl->voisin=voisin;
+		ptl->poids=poids;
 		ptl->suiv=NULL;
 		return;
 	}
-	if(ptl->suiv->state==q)
+	if(ptl->suiv->voisin==voisin)
 	{
 		return;
 	}
@@ -45,7 +49,7 @@ void ajouteListe(TypVoisins** l,int q)
 	tmp=ptl->suiv;
 	ptl->suiv=(TypVoisins*) malloc(sizeof(TypVoisins));
 	ptl=ptl->suiv;
-	ptl->state=q;
+	ptl->voisin=voisin;
 	ptl->suiv=tmp;
 }
 
@@ -59,7 +63,7 @@ void supprimeListe(TypVoisins** l, int arrivee)
 		return;
 	}
 
-	if((*l)->state == arrivee)
+	if((*l)->voisin == arrivee)
 	{
 		*l = (*l)->suiv;
 	}

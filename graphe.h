@@ -11,20 +11,25 @@ typedef struct
 	TypVoisins** voisins;
 } TypGraphe;
 
-//Ajoute la transition (depart, etiquette, arrivee) dans l'automate A.
 void ajouteVoisin(TypGraphe* G, int sommet, int voisin, int poids);
 
+TypGraphe* creerGraphe();
+
+void afficheGraphe(TypGraphe* G);
+
+void afficheTransition(TypGraphe* G);
+
 //Construit un automate exemple pour la déterminisation
-TypGraphe* construitAutomateExempleDeterminisation();
+//TypGraphe* construitAutomateExempleDeterminisation();
 
 //Crée en mémoire l'automate exemple et renvoie un pointeur vers cet automate
-TypGraphe* construitAutomateExemple();
+//TypGraphe* construitAutomateExemple();
 
 //Création d'un automate avec saisie des paramètres.
-TypGraphe* creerGraphe();
+
 /*
 //Affiche le contenu de l'automate A
-void afficheAutomate (automate* A);
+
 
 //Retourne le nombre de transitions de l'automate A
 int compteTransitions (automate* A);
