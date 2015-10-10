@@ -55,7 +55,7 @@ void ajouteListe(TypVoisins** l,int voisin, int poids)
 
 
 
-void supprimeListe(TypVoisins** l, int arrivee)
+void supprimeListe(TypVoisins** l, int voisin)
 {
 	
 	if(NULL == *l)
@@ -63,7 +63,7 @@ void supprimeListe(TypVoisins** l, int arrivee)
 		return;
 	}
 
-	if((*l)->voisin == arrivee)
+	if((*l)->voisin == voisin)
 	{
 		*l = (*l)->suiv;
 	}
@@ -71,7 +71,7 @@ void supprimeListe(TypVoisins** l, int arrivee)
 	{
 		if(NULL != (*l)->suiv)
 		{
-			supprimeListe(&(*l)->suiv, arrivee);
+			supprimeListe(&(*l)->suiv, voisin);
 		}
 	}
 }

@@ -17,7 +17,15 @@ TypGraphe* creerGraphe();
 
 void afficheGraphe(TypGraphe* G);
 
-void afficheTransition(TypGraphe* G);
+void afficheVoisin(TypGraphe* G);
+
+void supprimeSommet(TypGraphe* G, int sommet);
+
+void supprimeVoisin(TypGraphe* G, int sommet, int voisin);
+
+void decrementerTransition(TypGraphe* G, int p);
+
+
 
 //Construit un automate exemple pour la déterminisation
 //TypGraphe* construitAutomateExempleDeterminisation();
@@ -25,12 +33,7 @@ void afficheTransition(TypGraphe* G);
 //Crée en mémoire l'automate exemple et renvoie un pointeur vers cet automate
 //TypGraphe* construitAutomateExemple();
 
-//Création d'un automate avec saisie des paramètres.
-
 /*
-//Affiche le contenu de l'automate A
-
-
 //Retourne le nombre de transitions de l'automate A
 int compteTransitions (automate* A);
 
@@ -41,7 +44,7 @@ int deterministe (automate* A);
 int complet (automate* A);
 
 
-void decrementerTransition(automate* A, int p);
+
 
 //Supprime la transition (depart, etiquette, arrivee) de l'automate A.
 void supprimeTransition (automate* A, int depart, int arrivee, char etiquette);

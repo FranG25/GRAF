@@ -9,10 +9,9 @@ typedef struct s_liste {
 	struct s_liste* suiv;
 } TypVoisins;
 
-//Supprime une liste contenant la valeur v
-void supprimeListe(TypVoisins** l, int v);
 
-//Ajoute une liste
+void supprimeListe(TypVoisins** l, int voisin);
+
 void ajouteListe(TypVoisins** l, int voisin, int poids);
 
 #endif

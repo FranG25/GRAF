@@ -10,11 +10,11 @@ TypGraphe* creerGraphe()
 	TypGraphe* G = (TypGraphe*)malloc(sizeof(TypGraphe));
 	int i, j, size, oriente, pondere, voisins, cible, arete;
 	arete = 0;
-	
+
 	printf("Graphe orienté (1 -> oui - 0 -> non) : ");
 	scanf("%i", &oriente);
 	scanf("%*[^\n]s");
-	
+		
 	printf("Graphe pondéré (1 -> oui - 0 -> non) : ");
 	scanf("%i", &pondere);
 	scanf("%*[^\n]s");
@@ -55,8 +55,9 @@ TypGraphe* creerGraphe()
 		}
 	}
 	return G;
+}
 				
-void afficheTransition(TypGraphe* G)
+void afficheVoisin(TypGraphe* G)
 {
 	int i, j;
 	TypVoisins* tmp; 	
@@ -81,37 +82,64 @@ void afficheGraphe(TypGraphe* G)
 	printf(">> Affichage du Graphe\n");
 	printf("Nombre de sommet : %d\n", G->size);
 	printf("---------------------\n");
-	afficheTransition(G);
-	return 1;
+	afficheVoisin(G);
+	printf("\n");
+}
+
+void supprimeSommet(TypGraphe* G, int sommet)
+{
+	int i, j;
+	
+	if((sommet < G->size)&&(sommet > 0))
+	{
+
+		for(i=sommet; i<G->size; i++)
+		{
+			if(i+1 < G->size)
+			{
+				G->voisins[i] = G->voisins[i+1];
+			}
+		}
+		
+		G->size = G->size-1;
+		free(G->voisins[G->size]);
+			
+	
+		for(i=0; i<G->size; i++)
+		{
+			supprimeVoisin(G, i, sommet);
+		}
+		
+		decrementerTransition(G, sommet);
+	}
+
+}
+
+void supprimeVoisin(TypGraphe* G, int sommet, int voisin)
+{
+	supprimeListe(&G->voisins[sommet], voisin);
+}
+
+void decrementerTransition(TypGraphe* G, int p)
+{
+	int i, j;
+	TypVoisins* tmp;
+
+	for(i=0; i<G->size; i++)
+	{
+		tmp = G->voisins[i];
+
+		while(tmp != NULL)
+		{
+			if(tmp->voisin >= p)
+			{
+				tmp->voisin = tmp->voisin-1;
+			}
+			tmp = tmp->suiv;
+		}
+	}
 }
 			
-		
-		
-	/*
-	
-
-	
-	for(i=0;i<A->size;i++)
-	{
-		printf("\nEtat %d\n", i);
-		printf("Nombre de transition(s) : ");
-		scanf ("%d",&n);
-		scanf("%*[^\n]s");
-		getchar();
-		
-		for(j=0; j<n; j++)
-		{
-			printf("Etat cible (de 0 à %d): ", A->size-1);
-			scanf ("%d",&cible);
-
-			printf("Transition ( de 0 (a) jusqu'à %d (%c) : ", A->sizealpha-1, 'a'+A->sizealpha-1); 
-			scanf ("%d",&transition);
-			scanf("%*[^\n]s");
-			ajouteTransition(A, i, cible, 'a'+transition);
-		}
-	}*/
-	
-}
 
 /*automate* construitAutomateExempleDeterminisation()
 {
@@ -266,35 +294,11 @@ int complet(automate* A)
 }
 
 
-void decrementerTransition(automate* A, int p)
-{
-	int i, j;
-	liste* tmp;
-
-	for(i=0; i<A->size; i++)
-	{
-		for(j=0; j<A->sizealpha; j++)
-		{
-			tmp = A->trans[i][j];
-
-			while(tmp != NULL)
-			{
-				if(tmp->state >= p)
-				{
-					tmp->state = tmp->state-1;
-				}
-				tmp = tmp->suiv;
-			}
-		}
-	}
-}
 
 
 
-void supprimeTransition(automate* A, int depart, int arrivee, char etiquette)
-{
-	supprimeListe(&A->trans[depart][etiquette-'a'], arrivee);
-}
+
+
 	
 	
 
