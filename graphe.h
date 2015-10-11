@@ -25,6 +25,10 @@ void supprimeVoisin(TypGraphe* G, int sommet, int voisin);
 
 void decrementerTransition(TypGraphe* G, int p);
 
+int sauvegardeGraphe(TypGraphe* G, FILE* f);
+
+int sauvegardeVoisin(TypGraphe* G, FILE* f);
+
 
 
 //Construit un automate exemple pour la déterminisation

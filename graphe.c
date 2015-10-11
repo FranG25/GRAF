@@ -64,12 +64,12 @@ void afficheVoisin(TypGraphe* G)
 
 	for(i=0;i<G->size;i++)
 	{
-		printf("Sommet %d : ", i+1);
+		printf(" %d : ", i+1);
 		tmp = G->voisins[i];
 
 			while(tmp != NULL)
 			{
-				printf(" %d ", tmp->voisin);
+				printf(" (%d/%d) ", tmp->voisin, tmp->poids);
 				tmp = tmp->suiv;
 			}
 		printf("\n");
@@ -79,9 +79,20 @@ void afficheVoisin(TypGraphe* G)
 
 void afficheGraphe(TypGraphe* G)
 {
+	
 	printf(">> Affichage du Graphe\n");
-	printf("Nombre de sommet : %d\n", G->size);
-	printf("---------------------\n");
+	printf("# Nombre maximum de sommet\n");
+	printf("%d\n", G->size);
+	printf("# oriente\n");
+	if(G->oriente == 1)
+	{
+		printf("o\n");
+	}
+	else
+	{
+		printf("n\n");
+	}
+	printf("# sommets : voisin\n");
 	afficheVoisin(G);
 	printf("\n");
 }
@@ -139,6 +150,42 @@ void decrementerTransition(TypGraphe* G, int p)
 		}
 	}
 }
+
+int sauvegardeVoisin(TypGraphe* G, FILE* f)
+{
+	int i, j;
+	TypVoisins* tmp; 	
+
+	for(i=0;i<G->size;i++)
+	{
+		fprintf(f,"%d : ", i+1);
+		tmp = G->voisins[i];
+
+			while(tmp != NULL)
+			{
+				fprintf(f,"(%d/%d) ", tmp->voisin, tmp->poids);
+				tmp = tmp->suiv;
+			}
+		fprintf(f,"%s","\n");
+	}
+}
+
+int sauvegardeGraphe(TypGraphe* G, FILE* f)
+{
+	fprintf(f,"%s\n" ,"# Nombre maximum de sommet");
+	fprintf(f,"%d\n", G->size);
+	fprintf(f,"%s\n", "# oriente");
+	if(G->oriente == 1)
+	{
+		fprintf(f, "%s\n","o");
+	}
+	else
+	{
+		fprintf(f, "%s\n","n");
+	}
+	fprintf(f,"%s\n", "# sommets : voisin");
+	sauvegardeVoisin(G,f);
+}	
 			
 
 /*automate* construitAutomateExempleDeterminisation()

@@ -3,6 +3,7 @@
 
 int grapheExistant = 0;
 
+
 void menu1(TypGraphe* G);
 void menu2(TypGraphe* G);
 
@@ -63,6 +64,10 @@ void menu2(TypGraphe* G)
 	{
 		case 1:
 		{
+			G = creerGraphe();
+			afficheGraphe(G);
+			grapheExistant = 1;
+			menu2(G);
 		}
 		break;
 		case 2:
@@ -87,6 +92,22 @@ void menu2(TypGraphe* G)
 			menu2(G);
 		}
 		break;
+		case 8:
+		{
+			FILE* f;
+			f = fopen("./sauvegarde/graphe.txt", "w+");
+			if(f == NULL)
+			{
+				perror("Error opening file")
+			}
+			else
+			{
+				sauvegardeGraphe(G,f);
+			}
+			fclose(f);
+			free(f);
+			menu2(G);
+		}
 		case 9:
 		{
 			exit(-1);
