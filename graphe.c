@@ -45,7 +45,8 @@ TypGraphe* creerGraphe()
 		
 		for(j=0;j<voisins;j++)
 		{
-			possible = listeVoisinsPossible(G, j+1);
+			printf("i = %d j = %d\n", i, j);
+			possible = listeVoisinsPossible(G,i+1);
 			printf("Sommet possible > ");
 			while(possible!= NULL)
 			{
@@ -69,17 +70,18 @@ TypGraphe* creerGraphe()
 
 TypVoisins* listeVoisinsPossible(TypGraphe* G, int s)
 {
+	printf("Liste voisin possible\n");
 	int i, res;
 	TypVoisins* possible = (TypVoisins*)malloc(sizeof(TypVoisins*));
-	TypVoisins* tmp = possible;
 	for(i=0;i<G->size;i++)
 	{
 		res = presenceVoisin(G, i, s);
-		printf("s = %d\n", s);
-		printf("i+1 = %d res = %d\n", i+1, res);
-		if((i+1 != s)||(res == 0))
+		/*printf("s = %d\n", s);
+		printf("i+1 = %d res = %d\n", i+1, res);*/
+		if(i+1 != s)
 		{
 			possible->voisin = i+1;
+			printf("voisin = %d\n", possible->voisin);
 			possible->suiv = (TypVoisins*)malloc(sizeof(TypVoisins*));
 			possible = possible->suiv;	 
 		}
