@@ -19,6 +19,10 @@ void afficheGraphe(TypGraphe* G);
 
 void afficheVoisin(TypGraphe* G);
 
+TypVoisins* listeVoisinsPossible(TypGraphe* G, int s);
+
+int presenceVoisin(TypGraphe* G, int i, int v);
+
 void supprimeSommet(TypGraphe* G, int sommet);
 
 void supprimeVoisin(TypGraphe* G, int sommet, int voisin);

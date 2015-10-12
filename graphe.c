@@ -8,18 +8,19 @@ void ajouteVoisin(TypGraphe* G, int sommet, int voisin, int poids)
 TypGraphe* creerGraphe()
 {
 	TypGraphe* G = (TypGraphe*)malloc(sizeof(TypGraphe));
+	TypVoisins* possible = (TypVoisins*)malloc(sizeof(TypVoisins*));
 	int i, j, size, oriente, pondere, voisins, cible, arete;
 	arete = 0;
 
-	printf("Graphe orienté (1 -> oui - 0 -> non) : ");
+	printf("Graphe orienté (1/0) : ");
 	scanf("%i", &oriente);
 	scanf("%*[^\n]s");
 		
-	printf("Graphe pondéré (1 -> oui - 0 -> non) : ");
+	printf("Graphe pondéré (1/0) : ");
 	scanf("%i", &pondere);
 	scanf("%*[^\n]s");
 	
-	printf("Nombre de sommet : ");
+	printf("Nombre de sommet(s) : ");
 	scanf("%i", &size);
 	scanf("%*[^\n]s");
 	
@@ -36,14 +37,23 @@ TypGraphe* creerGraphe()
 	for(i=0;i<G->size;i++)
 	{
 		printf("	Sommet %d\n", i+1);
-		printf("> Nombre de voisin(s) : ");
+		printf("> Nombre de voisins (max = %d) : ", G->size-1);
 		scanf("%i", &voisins);
 		scanf("%*[^\n]s");
 		getchar();
-
+		
+		
 		for(j=0;j<voisins;j++)
 		{
-			printf("Sommet cible (de 1 à %d) : ", G->size);
+			possible = listeVoisinsPossible(G, j+1);
+			printf("Sommet possible > ");
+			while(possible!= NULL)
+			{
+				printf("%d / ", possible->voisin);
+				possible = possible->suiv;
+			}
+			
+			printf("cible : ");
 			scanf("%i", &cible);
 
 			if(G->pondere == 1)
@@ -56,6 +66,42 @@ TypGraphe* creerGraphe()
 	}
 	return G;
 }
+
+TypVoisins* listeVoisinsPossible(TypGraphe* G, int s)
+{
+	int i, res;
+	TypVoisins* possible = (TypVoisins*)malloc(sizeof(TypVoisins*));
+	TypVoisins* tmp = possible;
+	for(i=0;i<G->size;i++)
+	{
+		res = presenceVoisin(G, i, s);
+		printf("s = %d\n", s);
+		printf("i+1 = %d res = %d\n", i+1, res);
+		if((i+1 != s)||(res == 0))
+		{
+			possible->voisin = i+1;
+			possible->suiv = (TypVoisins*)malloc(sizeof(TypVoisins*));
+			possible = possible->suiv;	 
+		}
+	}
+	return possible;
+}
+
+int presenceVoisin(TypGraphe* G, int i, int v)
+{
+	TypVoisins* tmp = (TypVoisins*)malloc(sizeof(TypVoisins*));
+	tmp = G->voisins[i];
+	while(tmp != NULL)
+	{
+		if(tmp->voisin == v)
+		{
+			return 1;
+		}
+		tmp = tmp->suiv;
+	}
+	return 0;
+}
+
 				
 void afficheVoisin(TypGraphe* G)
 {

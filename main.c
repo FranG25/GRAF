@@ -98,7 +98,7 @@ void menu2(TypGraphe* G)
 			f = fopen("./sauvegarde/graphe.txt", "w+");
 			if(f == NULL)
 			{
-				perror("Error opening file")
+				perror("Error opening file");
 			}
 			else
 			{
