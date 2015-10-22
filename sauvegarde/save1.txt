@@ -1,0 +1,7 @@
+# Nombre maximum de sommet
+2
+# oriente
+o
+# sommets : voisin
+1 : (2/1) 
+2 : (1/1) 
