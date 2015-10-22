@@ -2,7 +2,8 @@
 
 
 int grapheExistant = 0;
-
+char* save;
+char chemin[50];
 
 void menu1(TypGraphe* G);
 void menu2(TypGraphe* G);
@@ -75,9 +76,18 @@ void menu2(TypGraphe* G)
 			menu2(G);
 		}
 		break;
+		case 3:
+		{
+			printf(">> Insertion d'un sommet\n\n");
+			G->size++;
+			G->voisins[G->size] = (TypVoisins*)malloc(sizeof(TypVoisins*));
+			G->voisins[G->size] = NULL;
+			menu2(G);
+		}
+		break;
 		case 5:
 		{
-			printf(">> Suppression d'un sommet\n");
+			printf(">> Suppression d'un sommet\n\n");
 			printf("Sommet à supprimer (1 à %d) : ", G->size);
 			scanf("%d",&choix);
 			scanf("%*[^\n]s");
@@ -95,7 +105,13 @@ void menu2(TypGraphe* G)
 		case 8:
 		{
 			FILE* f;
-			f = fopen("./sauvegarde/graphe.txt", "w+");
+			save = (char*)malloc(20*sizeof(char));
+			printf("Saisir le nom du fichier : ");
+			scanf("%s",save);
+			scanf("%*[^\n]s");
+			getchar();
+			sprintf(chemin, "./sauvegarde/%s.txt", save);
+			f = fopen(chemin, "w+");
 			if(f == NULL)
 			{
 				perror("Error opening file");
@@ -103,9 +119,11 @@ void menu2(TypGraphe* G)
 			else
 			{
 				sauvegardeGraphe(G,f);
+				printf("...Sauvegarde dans %s.txt..\n", save);
+				printf("\n");
 			}
 			fclose(f);
-			free(f);
+			free(save);
 			menu2(G);
 		}
 		case 9:
@@ -124,6 +142,10 @@ void menu2(TypGraphe* G)
 int main()
 {
 	TypGraphe* G;
+	printf("+--------------------+\n");
+	printf("|  APPLICATION GRAF  |\n");
+	printf("+--------------------+\n");
+	printf("\n");
 	menu1(G);
 }
 		

@@ -14,10 +14,12 @@ void ajouteListe(TypVoisins** l,int voisin, int poids)
 		*l=ptl;
 		return;
 	}
+	
 	if(ptl->voisin == voisin)
 	{
 		return;
 	}
+	
 	if(voisin< ptl->voisin)
 	{
 		tmp=*l;

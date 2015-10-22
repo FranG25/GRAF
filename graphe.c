@@ -5,26 +5,67 @@ void ajouteVoisin(TypGraphe* G, int sommet, int voisin, int poids)
 	ajouteListe(&G->voisins[sommet], voisin, poids);
 }
 
+int choixSommet(int* possible, int size)
+{
+	int exit = 0;
+	int cible;
+	int i;
+	while(exit != 1)
+	{
+		printf("Sommet(s) possible(s) : ");
+		for(i=0;i<size;i++)
+		{
+			if(possible[i] != 0)
+			{
+				printf("%d ", possible[i]);
+			}
+		}
+		printf("\n> Cible : ");
+		scanf("%i", &cible);
+		scanf("%*[^\n]s");
+		getchar();
+		for(i=0;i<size;i++)
+		{
+			if(cible == possible[i])
+			{
+				exit = 1;
+			}
+		}
+	}
+	return cible;	
+}
+
 TypGraphe* creerGraphe()
 {
 	TypGraphe* G = (TypGraphe*)malloc(sizeof(TypGraphe));
-	TypVoisins* possible = (TypVoisins*)malloc(sizeof(TypVoisins*));
-	int i, j, size, oriente, pondere, voisins, cible, arete;
-	arete = 0;
-
-	printf("Graphe orienté (1/0) : ");
-	scanf("%i", &oriente);
-	scanf("%*[^\n]s");
-		
-	printf("Graphe pondéré (1/0) : ");
-	scanf("%i", &pondere);
-	scanf("%*[^\n]s");
 	
-	printf("Nombre de sommet(s) : ");
+	int i, j, size, oriente, pondere, voisins, cible, arete, k, compteur;
+	arete = 0;
+	oriente = -1;
+	pondere = -1;
+
+
+	
+	while((oriente < 0)||(oriente > 1))
+	{
+		printf("Graphe orienté (1/0) : ");
+		scanf("%i", &oriente);
+		scanf("%*[^\n]s");
+	}
+	while((pondere < 0)||(pondere > 1))
+	{	
+		printf("Graphe pondéré (1/0) : ");
+		scanf("%i", &pondere);
+		scanf("%*[^\n]s");
+	}
+	
+	printf("Nombre de sommet(s)  : ");
 	scanf("%i", &size);
 	scanf("%*[^\n]s");
 	
 	G->size = size;
+	int possible[size];
+	
 	G->pondere = pondere;
 	G->oriente = oriente;
 	G->voisins = (TypVoisins**)malloc(G->size*sizeof(TypVoisins**));
@@ -36,66 +77,67 @@ TypGraphe* creerGraphe()
 
 	for(i=0;i<G->size;i++)
 	{
-		printf("	Sommet %d\n", i+1);
-		printf("> Nombre de voisins (max = %d) : ", G->size-1);
-		scanf("%i", &voisins);
-		scanf("%*[^\n]s");
-		getchar();
-		
+		voisins = -1;
+		compteur = listeVoisinsPossible(G, possible, i+1);
+		while((voisins < 0)||(voisins > compteur))
+		{
+			printf("	Sommet %d\n", i+1);
+			printf(" > Nombre de voisins (max = %d) : ", compteur);
+			scanf("%i", &voisins);
+			scanf("%*[^\n]s");
+			getchar();
+		}
 		
 		for(j=0;j<voisins;j++)
 		{
-			printf("i = %d j = %d\n", i, j);
-			possible = listeVoisinsPossible(G,i+1);
-			printf("Sommet possible > ");
-			while(possible!= NULL)
-			{
-				printf("%d / ", possible->voisin);
-				possible = possible->suiv;
-			}
-			
-			printf("cible : ");
-			scanf("%i", &cible);
-
+			compteur = listeVoisinsPossible(G,possible,i+1);
+			cible = choixSommet(possible, size);
 			if(G->pondere == 1)
 			{
-				printf("Poids de l'arête : ");
+				printf(" > Poids de l'arête : ");
 				scanf("%i", &arete);
 			}
+			
 			ajouteVoisin(G, i, cible, arete);
+			if(G->oriente == 0)
+			{
+				ajouteVoisin(G, cible-1, i+1, arete);
+			}
 		}
+		
 	}
 	return G;
 }
 
-TypVoisins* listeVoisinsPossible(TypGraphe* G, int s)
+int listeVoisinsPossible(TypGraphe* G, int* possible, int s)
 {
-	printf("Liste voisin possible\n");
-	int i, res;
-	TypVoisins* possible = (TypVoisins*)malloc(sizeof(TypVoisins*));
+	int i,j, res;
+	j = 0;
+
 	for(i=0;i<G->size;i++)
 	{
-		res = presenceVoisin(G, i, s);
-		/*printf("s = %d\n", s);
-		printf("i+1 = %d res = %d\n", i+1, res);*/
-		if(i+1 != s)
+		possible[i] = 0;
+	}
+	for(i=1;i<G->size+1;i++)
+	{
+		res =  presenceVoisin(G, i-1, s);
+		if((i!=s)&&(res!=1))
 		{
-			possible->voisin = i+1;
-			printf("voisin = %d\n", possible->voisin);
-			possible->suiv = (TypVoisins*)malloc(sizeof(TypVoisins*));
-			possible = possible->suiv;	 
+			possible[j] = i;
+			j++;	 
 		}
 	}
-	return possible;
+	return j;
 }
+
 
 int presenceVoisin(TypGraphe* G, int i, int v)
 {
 	TypVoisins* tmp = (TypVoisins*)malloc(sizeof(TypVoisins*));
-	tmp = G->voisins[i];
+	tmp = G->voisins[v-1];
 	while(tmp != NULL)
 	{
-		if(tmp->voisin == v)
+		if(tmp->voisin == i+1)
 		{
 			return 1;
 		}
