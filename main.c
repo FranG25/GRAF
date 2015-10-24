@@ -1,9 +1,6 @@
 #include "graphe.h"
 
-
 int grapheExistant = 0;
-char* save;
-char chemin[50];
 
 void menu1(TypGraphe* G);
 void menu2(TypGraphe* G);
@@ -30,7 +27,8 @@ void menu1(TypGraphe* G)
 		break;
 		case 2:
 		{
-			
+			lectureGraphe(G);
+			menu2(G);
 		}
 		break;
 		case 3:
@@ -49,6 +47,7 @@ void menu1(TypGraphe* G)
 void menu2(TypGraphe* G)
 {	
 	int choix;
+	int sommet, cible, poids;
 	printf("1) Création d'un graphe\n");
 	printf("2) Lecture d'un graphe\n");
 	printf("3) Insertion d'un sommet\n");
@@ -67,32 +66,36 @@ void menu2(TypGraphe* G)
 		{
 			G = creerGraphe();
 			afficheGraphe(G);
-			grapheExistant = 1;
 			menu2(G);
 		}
 		break;
 		case 2:
 		{
+			lectureGraphe(G);
 			menu2(G);
 		}
 		break;
 		case 3:
 		{
-			printf(">> Insertion d'un sommet\n\n");
-			G->size++;
-			G->voisins[G->size] = (TypVoisins*)malloc(sizeof(TypVoisins*));
-			G->voisins[G->size] = NULL;
+			insertionSommet(G);
+			menu2(G);
+		}
+		break;
+		case 4:
+		{
+			insertionArete(G);
 			menu2(G);
 		}
 		break;
 		case 5:
 		{
-			printf(">> Suppression d'un sommet\n\n");
-			printf("Sommet à supprimer (1 à %d) : ", G->size);
-			scanf("%d",&choix);
-			scanf("%*[^\n]s");
-			getchar();
-			supprimeSommet(G,choix);
+			suppressionSommet(G);
+			menu2(G);
+		}
+		break;
+		case 6:
+		{
+			suppressionArete(G);
 			menu2(G);
 		}
 		break;
@@ -104,30 +107,12 @@ void menu2(TypGraphe* G)
 		break;
 		case 8:
 		{
-			FILE* f;
-			save = (char*)malloc(20*sizeof(char));
-			printf("Saisir le nom du fichier : ");
-			scanf("%s",save);
-			scanf("%*[^\n]s");
-			getchar();
-			sprintf(chemin, "./sauvegarde/%s.txt", save);
-			f = fopen(chemin, "w+");
-			if(f == NULL)
-			{
-				perror("Error opening file");
-			}
-			else
-			{
-				sauvegardeGraphe(G,f);
-				printf("...Sauvegarde dans %s.txt..\n", save);
-				printf("\n");
-			}
-			fclose(f);
-			free(save);
+			sauvegardeGraphe(G);
 			menu2(G);
 		}
 		case 9:
 		{
+			printf("Fermeture de l'application.\n");
 			exit(-1);
 		}
 		break;
