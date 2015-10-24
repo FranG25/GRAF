@@ -1,6 +1,8 @@
 #ifndef NA_CONCAT_H
 #define NA_CONCAT_H
 
+#define TAILLE_MAX 200
+
 #include "liste.h"
 
 typedef struct
@@ -11,79 +13,52 @@ typedef struct
 	TypVoisins** voisins;
 } TypGraphe;
 
+
 void ajouteVoisin(TypGraphe* G, int sommet, int voisin, int poids);
 
+//Création d'un nouveau graphe par le biais d'une procédure guidée.
 TypGraphe* creerGraphe();
 
+//Affichage du graphe dans le même format que celui de la sauvegarde
 void afficheGraphe(TypGraphe* G);
 
+//Affiche les arêtes (et donc les voisins)
 void afficheVoisin(TypGraphe* G);
 
-TypVoisins* listeVoisinsPossible(TypGraphe* G, int s);
+//Ajoute dans un tableau d'entier les voisins possible pour la création d'un graphe. Retourne le nom de voisin possible.
+int listeVoisinsPossible(TypGraphe* G, int* possible, int s);
 
+//Indique si le sommet i est présent dans les voisins de v
 int presenceVoisin(TypGraphe* G, int i, int v);
 
+//Insert une nouvelle arête dans le graphe G
+void insertionArete(TypGraphe* G);
+
+//Insert un nouveau sommet dans le graphe G
+void insertionSommet(TypGraphe* G);
+
+//Procédure pour la suppression d'un sommet
+void suppressionSommet(TypGraphe* G);
+
+//Supprime un sommet du graphe G
 void supprimeSommet(TypGraphe* G, int sommet);
 
+//Supprime une arête (et donc un voisin) pour le sommet "sommet"
 void supprimeVoisin(TypGraphe* G, int sommet, int voisin);
 
+//
 void decrementerTransition(TypGraphe* G, int p);
 
-int sauvegardeGraphe(TypGraphe* G, FILE* f);
+//Sauvegarde le graphe courant dans le dossier sauvegarde et dans le bon format
+int sauvegardeGraphe(TypGraphe* G);
 
+//Etape dans la sauvegarde du graphe pour sauvegarder chaque arête
 int sauvegardeVoisin(TypGraphe* G, FILE* f);
 
+int choixSommet(int* possible, int size);
 
-
-//Construit un automate exemple pour la déterminisation
-//TypGraphe* construitAutomateExempleDeterminisation();
-
-//Crée en mémoire l'automate exemple et renvoie un pointeur vers cet automate
-//TypGraphe* construitAutomateExemple();
-
-/*
-//Retourne le nombre de transitions de l'automate A
-int compteTransitions (automate* A);
-
-//Retourne 1 si l'automate A est déterministe, et 0 sinon.
-int deterministe (automate* A);
-
-//Retourne 1 si l'automate A est complet, et 0 sinon.
-int complet (automate* A);
-
-
-
-
-//Supprime la transition (depart, etiquette, arrivee) de l'automate A.
-void supprimeTransition (automate* A, int depart, int arrivee, char etiquette);
-
-//Supprime l'état p de l'automate A. Si l'état n'existait pas, l'automate ne change pas.
-void supprimeEtat (automate* A, int p);
-
-//Ajoute un nouvel état et retourne le numéro de celui-ci
-int ajoutEtat(automate* A);
-
-//Complète l'automate A
-void completeAutomate (automate* A);
-
-//fusionne les états p1 et p2 dans l'automate A
-void fusionEtats (automate* A, int p1, int p2);
-
-//Retourne le produit de deux automates
-automate* produit(automate* au1, automate* au2);
-
-//Retourne 1 si l'intersection est vide, 0 sinon.
-int intersectionVide(automate* au1, automate* au2);
-
-//Déterminisation d'un automate.
-automate* determinise(automate* A);
-
-//Détermine si deux états sont équivalents
-int nerodeEquivalent(automate* A, int e1, int e2);
-
-//Minimisation d'un automate
-void minimiseNerode(automate* A);
-*/
+//Chargement d'un graphe depuis un fichier texte respectant le même format que celui de la sauvegarde et l'affichage
+int lectureGraphe(TypGraphe* G);
 
 
 #endif

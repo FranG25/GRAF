@@ -1,5 +1,6 @@
 #include "graphe.h"
 
+
 void ajouteVoisin(TypGraphe* G, int sommet, int voisin, int poids)
 {
 	ajouteListe(&G->voisins[sommet], voisin, poids);
@@ -79,32 +80,34 @@ TypGraphe* creerGraphe()
 	{
 		voisins = -1;
 		compteur = listeVoisinsPossible(G, possible, i+1);
-		while((voisins < 0)||(voisins > compteur))
-		{
-			printf("	Sommet %d\n", i+1);
-			printf(" > Nombre de voisins (max = %d) : ", compteur);
-			scanf("%i", &voisins);
-			scanf("%*[^\n]s");
-			getchar();
-		}
-		
-		for(j=0;j<voisins;j++)
-		{
-			compteur = listeVoisinsPossible(G,possible,i+1);
-			cible = choixSommet(possible, size);
-			if(G->pondere == 1)
+		if(compteur != 0)
+		{	
+			while((voisins < 0)||(voisins > compteur))
 			{
-				printf(" > Poids de l'arête : ");
-				scanf("%i", &arete);
+				printf("	Sommet %d\n", i+1);
+				printf(" > Nombre de voisins (max = %d) : ", compteur);
+				scanf("%i", &voisins);
+				scanf("%*[^\n]s");
+				getchar();
 			}
-			
-			ajouteVoisin(G, i, cible, arete);
-			if(G->oriente == 0)
+		
+			for(j=0;j<voisins;j++)
 			{
-				ajouteVoisin(G, cible-1, i+1, arete);
+				compteur = listeVoisinsPossible(G,possible,i+1);
+				cible = choixSommet(possible, size);
+				if(G->pondere == 1)
+				{
+					printf(" > Poids de l'arête : ");
+					scanf("%i", &arete);
+				}
+				
+				ajouteVoisin(G, i, cible, arete);
+				if(G->oriente == 0)
+				{
+					ajouteVoisin(G, cible-1, i+1, arete);
+				}
 			}
 		}
-		
 	}
 	return G;
 }
@@ -190,13 +193,13 @@ void afficheGraphe(TypGraphe* G)
 void supprimeSommet(TypGraphe* G, int sommet)
 {
 	int i, j;
-	
-	if((sommet < G->size)&&(sommet > 0))
-	{
 
-		for(i=sommet; i<G->size; i++)
+	if((sommet < G->size+1)&&(sommet > 0))
+	{
+		for(i=sommet; i<G->size+1; i++)
 		{
-			if(i+1 < G->size)
+			printf("i = %d\n", i);
+			if(i+1 < G->size+1)
 			{
 				G->voisins[i] = G->voisins[i+1];
 			}
@@ -213,7 +216,6 @@ void supprimeSommet(TypGraphe* G, int sommet)
 		
 		decrementerTransition(G, sommet);
 	}
-
 }
 
 void supprimeVoisin(TypGraphe* G, int sommet, int voisin)
@@ -241,6 +243,58 @@ void decrementerTransition(TypGraphe* G, int p)
 	}
 }
 
+void insertArete(TypGraphe* G)
+{
+	int poids, sommet, cible;
+	
+	printf(">> Insertion d'une arête <<\n\n");
+	printf("Sommet de départ : ");
+	scanf("%d",&sommet);
+	scanf("%*[^\n]s");
+	getchar();
+	printf("Sommet cible : ");
+	scanf("%d",&cible);
+	scanf("%*[^\n]s");
+	getchar();
+	poids = 0;
+	if(G->pondere == 1)
+	{
+		printf("Poids de l'arête : ");
+		scanf("%d",&poids);
+		scanf("%*[^\n]s");
+		getchar();
+	}
+	ajouteVoisin(G, sommet-1, cible, poids);
+	if(G->oriente == 0)
+	{
+		ajouteVoisin(G, cible-1, sommet, poids);
+	}
+	printf("\n\n");
+}
+
+
+void insertSommet(TypGraphe* G)
+{
+	printf(">> Insertion d'un nouveau sommet <<\n\n");
+	G->size++;
+	realloueMemoire(G->voisins, G->size);
+	G->voisins[G->size-1] = (TypVoisins*)malloc(sizeof(TypVoisins*));
+	G->voisins[G->size-1] = NULL;
+}
+
+void suppressionSommet(TypGraphe* G)
+{
+	int choix;
+	
+	printf(">> Suppression d'un sommet <<\n\n");
+	printf("Sommet à supprimer (1 à %d) : ", G->size);
+	scanf("%d",&choix);
+	scanf("%*[^\n]s");
+	getchar();
+	supprimeSommet(G,choix);
+}
+
+
 int sauvegardeVoisin(TypGraphe* G, FILE* f)
 {
 	int i, j;
@@ -260,23 +314,76 @@ int sauvegardeVoisin(TypGraphe* G, FILE* f)
 	}
 }
 
-int sauvegardeGraphe(TypGraphe* G, FILE* f)
+int sauvegardeGraphe(TypGraphe* G)
 {
-	fprintf(f,"%s\n" ,"# Nombre maximum de sommet");
-	fprintf(f,"%d\n", G->size);
-	fprintf(f,"%s\n", "# oriente");
-	if(G->oriente == 1)
+	FILE* f;
+	char* chemin = (char*)malloc(50*sizeof(char));
+	char* save = (char*)malloc(20*sizeof(char));
+	printf("Saisir le nom du fichier : ");
+	scanf("%s",save);
+	scanf("%*[^\n]s");
+	getchar();
+	sprintf(chemin, "./sauvegarde/%s.txt", save);
+	f = fopen(chemin, "w+");
+	if(f == NULL)
 	{
-		fprintf(f, "%s\n","o");
+		perror("Error opening file");
 	}
 	else
 	{
-		fprintf(f, "%s\n","n");
+		fprintf(f,"%s\n" ,"# Nombre maximum de sommet");
+		fprintf(f,"%d\n", G->size);
+		fprintf(f,"%s\n", "# oriente");
+		if(G->oriente == 1)
+		{
+			fprintf(f, "%s\n","o");
+		}
+		else
+		{
+			fprintf(f, "%s\n","n");
+		}
+		fprintf(f,"%s\n", "# sommets : voisin");
+		sauvegardeVoisin(G,f);
+		printf("...Sauvegarde dans %s.txt..\n", save);
+		printf("\n");
 	}
-	fprintf(f,"%s\n", "# sommets : voisin");
-	sauvegardeVoisin(G,f);
+	
+	fclose(f);
+	free(save);
 }	
 			
+int lectureGraphe(TypGraphe* G)
+{
+	FILE* f;
+	char tmp[TAILLE_MAX];
+	char chemin[50];
+	char* load  = (char*)malloc(20*sizeof(char));
+
+	printf("Saisir le nom du fichier : ");
+	scanf("%s",load);
+	scanf("%*[^\n]s");
+	getchar();
+	sprintf(chemin, "./sauvegarde/%s.txt", load);
+	f = fopen(chemin, "r");
+	if(f == NULL)
+	{
+		perror("Error opening file. Le chemin spécifié est soit faux, soit le fichier n'existe pas");
+		free(load);
+		free(f);
+		return -1;
+	}
+	else
+	{
+		while(f != NULL)
+		{
+			fgets(tmp, TAILLE_MAX, f);
+			printf("%s\n", tmp);
+
+		}
+	}
+	free(load);
+	return 1;
+}
 
 /*automate* construitAutomateExempleDeterminisation()
 {
